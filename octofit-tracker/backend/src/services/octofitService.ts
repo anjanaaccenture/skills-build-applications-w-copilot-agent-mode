@@ -165,14 +165,6 @@ export async function suggestWorkouts(userEmail: string) {
 
   const workouts = await Workout.find({ focus: focusCriteria }).limit(1).lean();
 
-  if (workouts.length === 0) {
-    const anyWorkout = await Workout.findOne().lean();
-    if (!anyWorkout) {
-      throw Object.assign(new Error('No workouts available'), { status: 500 });
-    }
-    return [{ ...anyWorkout, reason: 'Available workout' }];
-  }
-
   return workouts.map((w) => ({ ...w, reason }));
 }
 
