@@ -47,3 +47,4 @@ Record the commands you run and what each failure means.
 - **Frontend command**: `npm test --prefix octofit-tracker/frontend` — Validates React components render and fetch data from API. Failures indicate missing components or missing API integration. Success: 15/15 tests pass when all four pages (Activities, Teams, Leaderboard, Workouts) are fully implemented.
 - **Backend build command**: `npm run build --prefix octofit-tracker/backend` — Compiles TypeScript to JavaScript. Run after each logic tier change to catch type errors.
 - **Frontend build command**: `npm run build --prefix octofit-tracker/frontend` — Bundles React app with Vite. Run after each presentation tier change to catch build errors.
+ 
