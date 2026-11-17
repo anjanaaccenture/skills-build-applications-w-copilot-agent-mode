@@ -48,14 +48,22 @@ export async function createActivity(input: unknown) {
     throw Object.assign(new Error('Team not found'), { status: 400 });
   }
 
-  const activity = await Activity.create({
-    user: userId,
-    team: teamId,
-    type,
-    minutes,
-    points: computePoints(type),
-    occurredAt: new Date(),
-  });
+  let activity;
+  try {
+    activity = await Activity.create({
+      user: userId,
+      team: teamId,
+      type,
+      minutes,
+      points: computePoints(type),
+      occurredAt: new Date(),
+    });
+  } catch (error) {
+    if (error instanceof mongoose.Error.ValidationError) {
+      throw Object.assign(new Error('Invalid activity data'), { status: 400 });
+    }
+    throw error;
+  }
 
   return activity.toObject();
 }
