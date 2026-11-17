@@ -89,13 +89,13 @@ export async function createTeam(input: unknown) {
 }
 
 export async function getLeaderboard() {
-  const pipeline = [
+  const pipeline: mongoose.PipelineStage[] = [
     {
       $group: {
         _id: '$team',
         totalPoints: { $sum: '$points' },
       },
-    },
+    } as mongoose.PipelineStage,
     {
       $lookup: {
         from: 'teams',
@@ -103,20 +103,20 @@ export async function getLeaderboard() {
         foreignField: '_id',
         as: 'teamData',
       },
-    },
+    } as mongoose.PipelineStage,
     {
       $unwind: '$teamData',
-    },
+    } as mongoose.PipelineStage,
     {
       $sort: { totalPoints: -1 },
-    },
+    } as mongoose.PipelineStage,
     {
       $project: {
         _id: 0,
         teamName: '$teamData.name',
         totalPoints: 1,
       },
-    },
+    } as mongoose.PipelineStage,
   ];
 
   const results = await Activity.aggregate(pipeline);
