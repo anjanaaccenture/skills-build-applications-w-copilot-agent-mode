@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+import { getJson } from '../api/client.js';
 import { CapabilityCard } from './CapabilityCard.js';
 
 type LeaderboardResponse = {
@@ -9,12 +11,14 @@ type LeaderboardResponse = {
 };
 
 export default function Leaderboard() {
+  const fetchData = useCallback(() => getJson<LeaderboardResponse>('/api/leaderboard'), []);
+
   return (
     <CapabilityCard
       title="Leaderboard"
       description="Compare team point totals."
-      apiPath="/api/leaderboard"
       emptyMessage="No leaderboard data."
+      fetchData={fetchData}
       renderContent={(data: unknown) => {
         const { leaderboard } = data as LeaderboardResponse;
         if (leaderboard.length === 0) return <p>No leaderboard</p>;

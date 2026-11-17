@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+import { getJson } from '../api/client.js';
 import { CapabilityCard } from './CapabilityCard.js';
 
 type ActivitiesResponse = {
@@ -9,12 +11,14 @@ type ActivitiesResponse = {
 };
 
 export default function Activities() {
+  const fetchData = useCallback(() => getJson<ActivitiesResponse>('/api/activities'), []);
+
   return (
     <CapabilityCard
       title="Activities"
       description="Track student activity minutes and points."
-      apiPath="/api/activities"
       emptyMessage="No activities recorded."
+      fetchData={fetchData}
       renderContent={(data: unknown) => {
         const { activities } = data as ActivitiesResponse;
         if (activities.length === 0) return <p>No activities</p>;
