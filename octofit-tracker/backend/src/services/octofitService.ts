@@ -8,7 +8,7 @@ function computePoints(type: string): number {
     cycle: 25,
     swim: 35,
   };
-  return pointsMap[type] ?? 10;
+  return (Object.prototype.hasOwnProperty.call(pointsMap, type) ? pointsMap[type] : undefined) ?? 10;
 }
 
 export async function listActivities() {
