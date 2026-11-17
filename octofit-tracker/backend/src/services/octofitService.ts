@@ -79,13 +79,19 @@ export async function createTeam(input: unknown) {
     throw Object.assign(new Error('Field name must be a string'), { status: 400 });
   }
 
-  const team = await Team.create({
-    name,
-    mascot: mascot || '',
-    members: Array.isArray(members) ? members : [],
-  });
-
-  return team.toObject();
+  try {
+    const team = await Team.create({
+      name,
+      mascot: mascot || '',
+      members: Array.isArray(members) ? members : [],
+    });
+    return team.toObject();
+  } catch (error) {
+    if (error instanceof mongoose.Error.ValidationError || error instanceof mongoose.Error.CastError) {
+      throw Object.assign(error, { status: 400 });
+    }
+    throw error;
+  }
 }
 
 export async function getLeaderboard() {
